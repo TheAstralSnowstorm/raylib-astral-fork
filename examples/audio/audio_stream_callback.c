@@ -44,6 +44,8 @@ static void SquareCallback(void *framesOut, unsigned int frameCount);
 static void TriangleCallback(void *framesOut, unsigned int frameCount);
 static void SawtoothCallback(void *framesOut, unsigned int frameCount);
 
+static double waveCycle = 0.0;
+
 static int waveFrequency = 440;
 static int newWaveFrequency = 440;
 static int waveIndex = 0;
@@ -163,7 +165,14 @@ static void SineCallback(void *framesOut, unsigned int frameCount)
     // Synthesize the sine wave
     for (unsigned int i = 0; i < frameCount; i++)
     {
-        ((float *)framesOut)[i] = sinf(2*PI*waveIndex/wavelength);
+        ((float *)framesOut)[i] = sinf(2*PI*waveCycle);
+
+        waveCycle += 1.0/wavelength;
+
+        if (waveCycle >= 0.5)
+        {
+            waveCycle -= 1.0;
+        }
 
         waveIndex++;
 
